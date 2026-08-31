@@ -71,7 +71,7 @@
 
 本人針對研究需求修改既有 C++ codebase，加入：
 
-- AI 強度相關參數設定
+- 調整與整合既有 AI 強度參數
 - 非對稱棋子數量配置
 - Mixed Preemptive Rule
 - 自動化 AI 對戰流程
@@ -83,9 +83,22 @@
 - 棋子數量
 - 遊戲規則
 
-的組合進行自動化 self-play，
-並記錄勝場、敗場、和局率與 Expected Score，
-作為後續分析基礎。
+的組合進行自動化 self-play。
+
+本研究共建立 **71 組實驗配置**，
+每組固定執行 **1,000 場 AI 對戰**，
+累計完成 **71,000 場自動化對局**。
+
+每組實驗記錄：
+
+- P1 勝場
+- P2 勝場
+- 和局數
+- Win Rate
+- Draw Rate
+- Expected Score
+
+作為後續勝率矩陣、玩家能力評估與關卡設計的分析基礎。
 
 ---
 
@@ -152,8 +165,10 @@
 
 ## Win-Rate Matrix
 
-本研究透過不同 AI 強度、棋子數量及遊戲機制的自動化對戰，
-建立非對稱讓子勝率矩陣。
+本研究針對 **71 組不同 AI 強度、棋子數量與遊戲機制配置**，
+每組執行 1,000 場自動化 AI self-play，
+累計分析 **71,000 場對局**，
+並依據實驗結果建立非對稱讓子勝率矩陣。
 
 ![Win-Rate Matrix](figures/win-rate-matrix.png)
 
@@ -187,6 +202,14 @@ LaTeX 檔則包含論文中使用的整理後分析內容。
 
 本研究根據實驗勝率與 Expected Score，
 設計不同 Tier 的玩家能力評估關卡。
+
+Expected Score 定義為：
+
+\[
+E = WinRate + 0.5 \times DrawRate
+\]
+
+其中勝利計 1 分、和局計 0.5 分、失敗計 0 分。
 
 關卡並非單純依照 AI 強度排序，
 而是同時考量：
@@ -282,8 +305,7 @@ LaTeX 檔則包含論文中使用的整理後分析內容。
 - 實驗資料蒐集
 - 勝率分析與玩家能力評估流程
 
-原始專案聲明其 source code 遵循 LGPL v3，
-並附有原作者額外的授權說明。
+原始專案之授權說明聲明其 source code 遵循 LGPL v3，並包含原作者額外使用條款。
 
 考量原始專案的授權條件，
 本 repository 不重新散布完整的原始遊戲與 AI source code，
@@ -305,3 +327,20 @@ master-thesis/
     ├── raw-match-results.xlsx
     ├── summarized-results.xlsx
     └── summarized-analysis.tex
+```
+
+---
+
+# Technical Topics
+
+- C++
+- Existing Codebase Modification
+- Automated Simulation
+- Parameterized Experiments
+- AI Self-Play Experimentation
+- Game Balance Analysis
+- Statistical Win-Rate Analysis
+- Mathematical Analysis
+- Player Rating
+- Matchmaking
+- Difficulty / Level Design
