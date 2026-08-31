@@ -6,7 +6,7 @@ This chapter explores the win rate distribution of different skill tiers under a
 
 \section{Experimental Setup}
 \label{sec:setting}
-The experimental simulation is based on secondary development of the Minimax and Alpha-Beta pruning engine from the open-source project by Liu~\cite{liuweilhy2018ninechess}. To enable the engine to handle asymmetric resources and asynchronous phases, we revise the codes and integrate the Mixed Preemptive Rule into its underlying state machine.
+The experimental simulation is based on secondary development of the Minimax and Alpha-Beta pruning engine from the open-source project by Liu. To enable the engine to handle asymmetric resources and asynchronous phases, we revise the codes and integrate the Mixed Preemptive Rule into its underlying state machine.
 
 \subsection{Hardware and Performance Optimization}
 The experiment was run on a Windows OS environment. To break through the system hardware bottlenecks of conventional personal computers (e.g., 16GB RAM capacity) during high-load computing, we substantially refactor the original open-source project: completely stripping away the original Graphical User Interface (GUI) and rewriting it into a pure Command-Line Interface (CLI). This eliminates the resource consumption of front-end rendering and allows the system to perform batch automated execution via parameterized scripts in the VS Code environment, maximizing CPU throughput.
