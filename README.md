@@ -1,5 +1,5 @@
-# master-thesis# 非對稱九子棋之讓子勝率分析與玩家評分系統
-
+# 非對稱九子棋之讓子勝率分析與玩家評分系統
+# Handicap Win-Rate Analysis and Player Rating System in Asymmetric Nine Men’s Morris
 國立清華大學資訊工程學系碩士論文研究
 
 ## 研究簡介
