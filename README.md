@@ -1,89 +1,75 @@
 # 非對稱九子棋之讓子勝率分析與玩家評分系統
-# Handicap Win-Rate Analysis and Player Rating System in Asymmetric Nine Men’s Morris
+
+## Handicap Win-Rate Analysis and Player Rating System in Asymmetric Nine Men's Morris
+
 國立清華大學資訊工程學系碩士論文研究  
-主要使用語言：C++
+主要使用語言：**C++**
 
 ---
 
 ## 研究簡介
 
 本研究探討 **非對稱九子棋（Asymmetric Nine Men's Morris）** 中，
-不同棋子數量、AI 強度與遊戲機制對勝率與遊戲平衡性的影響。
+不同棋子數量、AI 強度與遊戲機制對勝率及遊戲平衡性的影響。
 
-傳統九子棋通常採用對稱資源配置，
-但若希望透過「讓子」方式建立不同難度的遊戲關卡，
-單純調整棋子數量往往會造成勝率變化過於離散，
-難以建立細緻且公平的難度梯度。
+若僅透過棋子數量進行讓子，
+不同配置之間的勝率可能產生較大的離散變化，
+不利於建立細緻的玩家難度與配對系統。
 
-因此，本研究除了分析不同讓子條件下的勝率外，
-亦提出一套新的 **Mixed Preemptive Rule**，
-讓少子方在完成放置階段後可提前進入移動或飛行階段，
-藉由引入額外的時間／步數優勢，
-使非對稱局面的勝率能在棋子數量差之外進一步調整。
+因此，本研究除分析不同讓子條件下的勝率外，
+亦提出 **Mixed Preemptive Rule**：
+當少子方率先完成棋子放置後，
+可提前進入移動或飛行階段，
+藉此引入額外的時間／步數優勢。
 
-研究最終結合：
+透過：
 
-- AI 自動化對戰
-- 非對稱讓子配置
-- 勝率矩陣
-- 玩家能力評估
-- 關卡設計
+- 棋子數量差
+- AI 強度
+- 遊戲機制
+- 自動化 AI self-play
+- 勝率與 Expected Score 分析
 - 數學邊界條件分析
 
-建立一套可用於玩家難度分級與公平配對的分析架構。
+本研究建立非對稱讓子勝率矩陣，
+並進一步設計玩家能力分級、關卡及配對機制。
 
 ---
 
-## 研究目標
-
-本研究主要包含以下幾個目標：
-
-1. 分析不同棋子數量差所造成的遊戲平衡變化。
-2. 建立不同 AI 強度之間的自動化對戰實驗。
-3. 設計額外遊戲機制，使非對稱讓子具有更細緻的勝率調整能力。
-4. 建立讓子勝率矩陣，量化不同設定下的預期勝率。
-5. 根據實驗結果設計玩家關卡與能力評估系統。
-6. 分析部分極端非對稱局面的理論邊界條件。
-
----
-
-# 核心原創貢獻
+# 核心研究貢獻
 
 ## 1. Mixed Preemptive Rule
 
-為改善單純透過棋子數量調整難度時，
-勝率變化過於離散的問題，
-本研究提出 **Mixed Preemptive Rule**。
+本研究提出 **Mixed Preemptive Rule**，
+目的在於增加非對稱讓子系統的勝率調整維度。
 
 在傳統同步放置規則中，
-雙方必須完成所有棋子的放置，
+雙方通常需完成所有棋子的放置後，
 才能進入後續移動階段。
 
 在 Mixed Preemptive Rule 中，
-若少子方率先完成其棋子的放置，
+若少子方先耗盡手中的棋子，
 即可提前進入移動或飛行階段，
-不需等待多子方完成所有棋子的放置。
+不必等待多子方完成放置。
 
-因此，遊戲平衡不再只由棋子數量差決定，
-而可以同時受到以下三種因素影響：
+因此，遊戲平衡可同時受到三種因素影響：
 
 - **Spatial Handicap**：棋子數量差所造成的空間資源差異
 - **Temporal Advantage**：少子方提前移動所取得的時間／步數優勢
-- **AI Strength**：不同 AI 搜尋或決策能力所造成的強度差
+- **AI Strength**：不同 AI 強度所造成的決策能力差異
 
-此設計將「空間資源優勢」與「時間優勢」分離，
-增加一個可調整勝率的維度，
-使不同難度之間可以建立更細緻的平衡梯度。
+此機制將空間資源優勢與時間優勢分離，
+使讓子條件具有更細緻的平衡調整能力。
 
 ---
 
-## 2. AI 參數化與自動化對戰
+## 2. C++ 研究平台修改與自動化實驗
 
-本研究基於既有開源九子棋遊戲與 AI 程式進行修改與擴充。
+本研究基於既有開源 Nine Men's Morris 遊戲與 AI 程式進行修改與擴充。
 
-原始遊戲引擎與 AI 並非由本人從零開發，
-本人主要針對研究需求修改既有 C++ codebase，
-加入：
+原始遊戲引擎與 AI 並非由本人從零開發。
+
+本人針對研究需求修改既有 C++ codebase，加入：
 
 - AI 強度相關參數設定
 - 非對稱棋子數量配置
@@ -91,67 +77,128 @@
 - 自動化 AI 對戰流程
 - 實驗結果紀錄與資料蒐集功能
 
-透過不同 AI 強度、棋子數量與遊戲機制的組合，
-進行大量自動化 self-play 實驗，
-並蒐集：
+透過不同：
 
-- 先手勝率
-- 後手勝率
-- 和局率
-- 不同條件下的期望分數
+- AI 強度
+- 棋子數量
+- 遊戲規則
 
-作為後續勝率矩陣與玩家評估系統的基礎。
+的組合進行自動化 self-play，
+並記錄勝場、敗場、和局率與 Expected Score，
+作為後續分析基礎。
 
 ---
 
-## 3. 讓子勝率矩陣
+## 3. 非對稱讓子勝率矩陣
 
-透過不同 AI 強度與非對稱棋子配置的自動化對戰，
-本研究建立 **Handicap Win-Rate Matrix**，
-量化不同遊戲設定之間的平衡程度。
+根據不同 AI 強度與讓子條件下的自動化對戰結果，
+建立 **Handicap Win-Rate Matrix**，
+用以量化不同配置之間的遊戲平衡程度。
 
-勝率矩陣可用來描述：
+勝率矩陣可用於分析：
 
 - 不同 AI 強度之間的實力差
-- 不同棋子數量讓子所產生的影響
-- Mixed Preemptive Rule 對遊戲平衡的修正效果
+- 不同棋子數量讓子的影響
+- Mixed Preemptive Rule 對勝率的修正效果
 - 不同配置下玩家的預期得分
 
-此矩陣可作為後續：
+並作為：
 
 - 玩家能力推估
+- 難度分級
 - 關卡設計
 - 公平配對
-- 難度調整
 
-的基礎。
+的依據。
 
 ---
 
-# 玩家關卡與能力評估設計
+# My Contributions
 
-本研究進一步依據實驗勝率，
+本人在本研究中的主要工作包括：
+
+- 閱讀並修改既有 C++ 九子棋 codebase
+- 設計並實作 **Mixed Preemptive Rule**
+- 建立 AI 強度、棋子數量與遊戲機制的參數化實驗架構
+- 建立自動化 AI self-play 與資料蒐集流程
+- 建構非對稱讓子勝率矩陣
+- 分析不同遊戲配置下的勝率、和局率與 Expected Score
+- 設計玩家 Tier、能力評估與關卡系統
+- 將勝率資料應用於玩家評分與公平配對
+- 進行非對稱局面的數學邊界條件分析
+- 結合模擬實驗與理論分析建立完整研究流程
+
+---
+
+# Research Workflow
+
+研究流程可概括為：
+
+1. 閱讀並理解既有開源 C++ 九子棋程式
+2. 修改系統以支援非對稱棋子配置與參數化 AI
+3. 設計並實作 Mixed Preemptive Rule
+4. 執行不同配置下的自動化 AI self-play
+5. 建立勝率矩陣並分析遊戲平衡
+6. 根據實驗結果設計玩家能力 Tier 與關卡
+7. 進行部分極端非對稱局面的理論分析
+
+更完整的研究方法請見：
+
+[docs/methodology.md](docs/methodology.md)
+
+---
+
+# Experimental Results
+
+## Win-Rate Matrix
+
+本研究透過不同 AI 強度、棋子數量及遊戲機制的自動化對戰，
+建立非對稱讓子勝率矩陣。
+
+![Win-Rate Matrix](figures/win-rate-matrix.png)
+
+勝率矩陣主要用於尋找不同玩家能力與 AI 強度之間，
+較接近平衡勝率的讓子條件。
+
+---
+
+## Automated Self-Play
+
+以下為自動化 AI 對戰與實驗執行流程的示意：
+
+![Automated Self-Play](figures/automated-self-play.png)
+
+---
+
+## Experimental Data
+
+完整實驗資料與分析檔案：
+
+- [Raw Match Results](results/raw-match-results.xlsx)
+- [Summarized Results](results/summarized-results.xlsx)
+- [LaTeX Analysis Source](results/summarized-analysis.tex)
+
+Excel 檔案保存不同 AI 強度、棋子配置與遊戲機制下的對戰統計；
+LaTeX 檔則包含論文中使用的整理後分析內容。
+
+---
+
+# 玩家關卡與能力評估
+
+本研究根據實驗勝率與 Expected Score，
 設計不同 Tier 的玩家能力評估關卡。
 
-關卡不單純依照 AI 強度排序，
+關卡並非單純依照 AI 強度排序，
 而是同時考量：
 
 - AI 強度
 - 玩家與 AI 的棋子數量差
-- 是否採用 Mixed Preemptive Rule
+- 遊戲規則
 - 勝率
 - 和局率
 - Expected Score
 
-使每個 Tier 能測試不同程度的：
-
-- 防守能力
-- 空間規劃能力
-- 節奏利用能力
-- 長期策略能力
-- 高壓局面下的計算能力
-
----
+藉此建立不同難度與策略需求的測試環境。
 
 ## 代表性關卡
 
@@ -163,119 +210,98 @@
 | Platinum | 5 | Player 7 vs AI 2, Mixed | Win 4.4%, Draw 89.1%, E = 48.95% |
 | Diamond | 6 | Player 8 vs AI 5, Mixed | Win 22.8%, Draw 55.7%, E = 50.65% |
 
-其中部分關卡的 Expected Score 接近 50%，
-代表該配置可以作為相對平衡的能力測試條件。
+部分關卡以 **Expected Score 接近 50%**
+作為相對平衡的能力評估條件。
 
 ---
 
 # 理論分析與邊界條件
 
-除了模擬實驗外，
-本研究亦針對部分非對稱局面進行數學分析，
-以驗證極端讓子配置下的理論邊界。
+除模擬實驗外，
+本研究亦針對部分極端非對稱局面進行數學分析。
 
----
-
-## 3 vs 4 Handicap Game
+## 3-vs-4 Handicap Game
 
 考慮：
 
-- P1 持有 3 枚棋子
-- P2 持有 4 枚棋子
+- P1：3 枚棋子
+- P2：4 枚棋子
 
 ### Traditional Synchronous Placement
 
-在傳統同步放置規則下，
-可證明：
+在傳統同步放置規則下，可證明：
 
-> **若 P2 採取最佳策略，4-piece side P2 必勝。**
+> 若 P2 採取最佳策略，4-piece side P2 可以強制取得勝利。
 
-證明核心如下：
+證明的主要想法為：
 
-1. P2 可優先選擇具有較高連接度的位置建立進攻結構。
-2. 當 P1 嘗試形成 mill 時，P2 可立即進行阻擋。
-3. P2 可建立迫使 P1 防守的雙重威脅。
-4. 由於同步規則要求雙方完成所有棋子的放置後才能進入下一階段，
-   P1 無法在 P2 完成最後一枚棋子的放置前取得有效反擊。
-5. P2 最終可強制形成 mill，
-   移除 P1 一枚棋子，
-   使 P1 降至 2 枚棋子而失去繼續遊戲的能力。
+1. P2 可利用高連接度位置建立進攻結構。
+2. 當 P1 嘗試形成 mill 時，P2 可進行阻擋。
+3. P2 可進一步建立迫使 P1 防守的成線威脅。
+4. 在同步放置規則下，P1 無法在 P2 完成最後一枚棋子前取得足夠的反擊空間。
+5. P2 最終可強制形成 mill，使 P1 損失棋子並進入失敗狀態。
 
-因此，在此規則下，
+因此，在此設定下，
 3-piece side 無法避免失敗。
 
 ---
 
-## Mixed Preemptive Rule 下的變化
+## Mixed Preemptive Rule 下的改變
 
-若改採 Mixed Preemptive Rule，
-局面會產生本質上的改變。
-
-當 3-piece side 完成第三枚棋子的放置後，
-其手牌已經耗盡，
-因此可以提前進入 Flying Phase。
+採用 Mixed Preemptive Rule 後，
+3-piece side 在完成第三枚棋子的放置時，
+即可提前進入 Flying Phase。
 
 此時：
 
-- 4-piece side 仍有棋子尚未完成放置
-- 3-piece side 已獲得高度移動自由
-- 少子方可以快速進行防守阻擋
-- 少子方亦可能利用飛行能力主動形成 mill
+- 4-piece side 尚未完成所有棋子的放置
+- 3-piece side 已取得更高的移動自由
+- 少子方可以快速進行 mill 防守
+- 少子方亦可能利用飛行能力形成反擊
 
 因此，
-在 Mixed Preemptive Rule 下，
-傳統同步規則中的必勝邊界不再直接成立。
+傳統同步規則中的 4-piece side 必勝邊界不再直接成立。
 
-這也說明 Mixed Preemptive Rule
-確實能在極端非對稱資源配置中，
-透過時間優勢修正空間資源劣勢。
+這說明時間優勢可以在部分極端非對稱局面中，
+補償少子方的空間資源劣勢。
 
 ---
 
-# Research Workflow
+# Open-Source Attribution
 
-本研究整體流程如下：
+本研究基於既有開源 Nine Men's Morris 遊戲與 AI 程式進行修改與擴充。
 
-1. 讀取並理解既有開源 C++ 九子棋程式碼
-2. 修改程式以支援研究所需的參數化設定
-3. 實作 Mixed Preemptive Rule
-4. 建立不同 AI 強度與讓子條件
-5. 執行大量自動化 AI self-play
-6. 蒐集勝負與和局資料
-7. 建立讓子勝率矩陣
-8. 分析不同配置下的遊戲平衡
-9. 設計玩家 Tier 與能力評估關卡
-10. 進行部分極端局面的數學邊界分析
+原始遊戲引擎與 AI 實作並非由本人從零開發。
 
----
+本人主要針對研究需求新增或修改：
 
-# My Contributions
+- 非對稱棋子配置
+- AI 實驗參數
+- Mixed Preemptive Rule
+- 自動化 AI self-play
+- 實驗資料蒐集
+- 勝率分析與玩家能力評估流程
 
-本人在本研究中的主要貢獻包括：
+原始專案聲明其 source code 遵循 LGPL v3，
+並附有原作者額外的授權說明。
 
-- 閱讀並修改既有 C++ 九子棋 codebase
-- 依研究需求擴充遊戲與實驗功能
-- 設計並實作 **Mixed Preemptive Rule**
-- 建立 AI 強度、棋子數量與遊戲機制的參數化實驗架構
-- 建立自動化 AI 對戰與資料蒐集流程
-- 建構非對稱讓子勝率矩陣
-- 分析不同讓子配置與遊戲機制的勝率差異
-- 設計多階層玩家能力評估與關卡系統
-- 將 Expected Score 應用於關卡平衡與玩家評估
-- 進行兩種機制 3-vs-4 局面的數學邊界分析
-- 結合模擬結果與理論分析建立完整研究架構
+考量原始專案的授權條件，
+本 repository 不重新散布完整的原始遊戲與 AI source code，
+主要展示研究方法、實驗結果、分析資料及本人可獨立公開的研究內容。
 
 ---
 
-# Experimental Results
+# Repository Structure
 
-## Win-Rate Matrix
-
-本研究透過不同 AI 強度、棋子數量與遊戲機制的自動化對戰，
-建立讓子勝率矩陣。
-![Win-Rate Matrix](figures/win-rate-matrix.png)
-
----
-
-For more details, see:
-[`docs/methodology.md`](docs/methodology.md)
+```text
+master-thesis/
+├── README.md
+├── docs/
+│   └── methodology.md
+├── figures/
+│   ├── win-rate-matrix.png
+│   └── automated-self-play.png
+└── results/
+    ├── raw-match-results.xlsx
+    ├── summarized-results.xlsx
+    └── summarized-analysis.tex
