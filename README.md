@@ -274,3 +274,8 @@
 本研究透過不同 AI 強度、棋子數量與遊戲機制的自動化對戰，
 建立讓子勝率矩陣。
 ![Win-Rate Matrix](figures/win-rate-matrix.png)
+
+---
+
+For more details, see:
+[`docs/methodology.md`](docs/methodology.md)
